@@ -9,9 +9,6 @@ from backlog.issue import Issue
 from backlog.git import Git
 from backlog.user import User
 
-BACKLOG_BASE_URL = "https://{space}.backlog.jp"
-BACKLOG_URI_PREFIX = "/api/v2/"
-
 
 class BacklogError(Exception):
     pass
@@ -21,12 +18,44 @@ class BaseAPI(object):
     def __init__(self, space, api_key=None):
         self.space = space
         self.api_key = api_key
-        self.base_url = BACKLOG_BASE_URL.format(space=space) + BACKLOG_URI_PREFIX
+        self.base_url = self._detect_endpoint(space, api_key)
         self.api = None
         self._build_api()
 
     def _build_api(self):
         self.api = None
+
+    @staticmethod
+    def _detect_endpoint(space_name, api_key):
+        # at first try .com (new default)
+        _endpoint = "https://{}.backlog.com/api/v2/".format(space_name)
+        resp = requests.get(_endpoint+"space", params={"apiKey": api_key})
+        if resp.status_code == 401:
+            # space found but got 401 (Authentication failure)
+            raise Exception(resp, resp.text)
+        try:
+            space_key = resp.json().get("spaceKey")
+            if space_key == space_name:
+                return _endpoint
+        except Exception:
+            # space not found
+            pass
+
+        # if space not found in .com, try .jp
+        _endpoint = "https://{}.backlog.jp/api/v2/".format(space_name)
+        resp = requests.get(_endpoint+"space", params={"apiKey": api_key})
+        if resp.status_code == 401:
+            # space found but got 401 (Authentication failure)
+            raise Exception(resp, resp.text)
+        try:
+            space_key = resp.json().get("spaceKey")
+            if space_key == space_name:
+                return _endpoint
+        except Exception:
+            # space not found
+            pass
+
+        raise Exception("retrive space information failed. maybe space not found in .com nor .jp")
 
     def invoke_method(self, method, uri, query_param={}, request_param={}, headers=None, **kwargs):
         """
