@@ -77,3 +77,19 @@ Qiita https://qiita.com/hassaku_63/items/b9eb2a1c7ecd3c19507d
 # Contact
 
 Twitter: [hassaku63](https://twitter.com/hassaku_63)
+
+# License
+
+## Acknowledgements
+
+### [netmarkjp/pybacklog](https://github.com/netmarkjp/pybacklog)
+
+```
+Copyright 2017 Toshiaki Baba
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+```
+
+`backlog/base.py` includes codes from [pybacklog](https://github.com/netmarkjp/pybacklog/blob/78099cbd70c4997829f714dff82285eaa0fd8169/pybacklog/__init__.py#L17-L47).  See commit log( [`6ac57cb40f4a8c410c81abdab467e9b98575afa5`](https://github.com/hassaku63/pbl/commit/6ac57cb40f4a8c410c81abdab467e9b98575afa5) ) for details.
